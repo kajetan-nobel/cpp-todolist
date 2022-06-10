@@ -9,8 +9,6 @@
 
 using namespace std;
 
-// Helpers::clearscreen();
-
 AppController::AppController() {
     this->taskManager = new TaskDatabaseManager();
 }
@@ -89,7 +87,7 @@ void AppController::taskIndex() {
         Task task = tasks[index];
 
         index++;
-        cout << Table::format("X", 15);
+        cout << Table::format(task.getId(), 15);
         cout << Table::format(task.getValue(), 50);
         cout << Table::format(task.getCreatedAt(), 20);
         cout << Table::format(task.getCompletedAt(), 15);

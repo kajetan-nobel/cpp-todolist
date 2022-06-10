@@ -25,7 +25,10 @@ vector<Task> TaskDatabaseManager::paginate() {
         getline(file, stream);
 
         if (stream != "") {
-            tasks.insert(tasks.begin() + index, Task::fromCsv(stream));
+            tasks.insert(
+                tasks.begin() + index, 
+                Task::fromCsv(to_string(index + 1), stream)
+            );
         }
 
         index++;

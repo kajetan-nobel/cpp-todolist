@@ -5,6 +5,7 @@
 
 class Task {
     private:
+        std::string id;
         std::string value;
         std::string created_at;
         std::string completed_at;
@@ -15,18 +16,24 @@ class Task {
         );
 
         Task(
+            std::string id,
             std::string value,
             std::string created_at,
             std::string completed_at
         );
 
-
+        std::string getId();
         std::string getValue();
         std::string getCreatedAt();
         std::string getCompletedAt();
 
         std::string toCsv();
-        Task static fromCsv(std::string);
+        
+        Task static fromCsv(
+            std::string id, 
+            std::string data
+        );
+
         void dump();
 };
 
