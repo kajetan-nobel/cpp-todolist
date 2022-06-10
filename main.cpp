@@ -1,9 +1,9 @@
 #include <iostream>
-#include "app/view/MenuView.h"
+#include "app/controllers/AppController.h"
 
 int main() {
-    MenuView menu;
-    menu.initial();
+    AppController app;
+    app.initial();
     
     return EXIT_SUCCESS;
 }
