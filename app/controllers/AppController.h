@@ -10,6 +10,7 @@ class AppController {
         void menuList();
         bool menuSelect();
 
+        void taskIndex();
         void taskCreate();
         void taskEdit();
         void taskToggleCompletion();

@@ -20,7 +20,13 @@ class Task {
             std::string completed_at
         );
 
+
+        std::string getValue();
+        std::string getCreatedAt();
+        std::string getCompletedAt();
+
         std::string toCsv();
+        Task static fromCsv(std::string);
         void dump();
 };
 

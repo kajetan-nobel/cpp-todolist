@@ -1,9 +1,11 @@
 #include "AppController.h"
 #include "../helpers/Clearscreen.h"
+#include "../helpers/Table.h"
 #include "../models/Task.h"
 #include "../services/TaskDatabaseManager.h"
 #include <iostream>
 #include <cctype>
+#include <vector>
 
 using namespace std;
 
@@ -14,7 +16,7 @@ AppController::AppController() {
 }
 
 void AppController::menuList() {
-    cout << "Listuj to bitch" << endl;
+    this->taskIndex();
     cout << "1. Add task" << endl;
     cout << "2. Edit task" << endl;
     cout << "3. Toggle completion" << endl;
@@ -70,6 +72,31 @@ void AppController::initial() {
         this->menuList();
         exit = this->menuSelect();
     } while (!exit);
+}
+
+void AppController::taskIndex() {
+    vector<Task> tasks = this->taskManager->paginate();
+
+    cout << Table::format("ID:", 15);
+    cout << Table::format("What to do:", 50);
+    cout << Table::format("Created At:", 20);
+    cout << Table::format("Completed At:", 15);
+    cout << endl;
+
+    int index = 0;
+
+    while(index < tasks.size()) {
+        Task task = tasks[index];
+
+        index++;
+        cout << Table::format("X", 15);
+        cout << Table::format(task.getValue(), 50);
+        cout << Table::format(task.getCreatedAt(), 20);
+        cout << Table::format(task.getCompletedAt(), 15);
+        cout << endl;
+    }
+
+    cout << endl;
 }
 
 void AppController::taskCreate() {

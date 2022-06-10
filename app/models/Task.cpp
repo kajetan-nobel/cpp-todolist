@@ -1,4 +1,6 @@
 #include "Task.h"
+#include "../helpers/Csv.h"
+#include <sstream>
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -39,4 +41,28 @@ string Task::toCsv() {
     tmp += this->created_at + ",";
     tmp += this->completed_at;
     return tmp;
+}
+
+Task Task::fromCsv(string data) {
+    vector<string> row = CSV::read_row(data, ',');    
+    
+    Task task(
+        row[0],
+        row[1],
+        row[2]
+    );
+
+    return task;
+}
+
+string Task::getValue() {
+    return this->value;
+}
+
+string Task::getCreatedAt() {
+    return this->created_at;
+}
+
+string Task::getCompletedAt() {
+    return this->completed_at;
 }

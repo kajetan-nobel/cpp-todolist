@@ -3,12 +3,13 @@
 
 #include "../models/Task.h"
 #include <string>
+#include <vector>
 
 class TaskDatabaseManager {
     public:
-        // Task *paginate(int perPage = 25);
+        std::vector<Task> paginate();
         void create(Task task);
-        void update();
+        void update(Task task);
         void destroy(Task task);
     
     private: 
