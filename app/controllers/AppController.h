@@ -1,20 +1,13 @@
 #ifndef __APP_CONTROLLER__H
 #define __APP_CONTROLLER__H
 
-#include "../services/TaskDatabaseManager.h"
+#include "TaskController.h"
 
 class AppController {
     private:
-        TaskDatabaseManager *taskManager;
-
+        TaskController *taskController;
         void menuList();
         bool menuSelect();
-
-        void taskIndex();
-        void taskCreate();
-        void taskEdit();
-        void taskToggleCompletion();
-        void taskDelete();
 
     public:
         AppController();

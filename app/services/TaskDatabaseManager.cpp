@@ -6,32 +6,42 @@
 using namespace std;
 
 const string TaskDatabaseManager::DB_FILE = "database.csv";
+const int TaskDatabaseManager::PER_PAGE = 10;
 
-vector<Task> TaskDatabaseManager::paginate() {
+vector<Task> TaskDatabaseManager::paginate(int page) {
     ifstream file;
     vector<Task> tasks;
 
     file.open(this->DB_FILE);
 
     if (!file) {
-        cerr << "Error: file could not be opened" << endl;
         return tasks;
     }
 
     string stream;
     int index = 0;
+    int toGet = 0;
+    int toIgnore = (page - 1) * this->PER_PAGE;
 
-    while (!file.eof()) {
-        getline(file, stream);
+    while (getline(file, stream)) {
+        index++; 
+        
+        if (toIgnore > 0) {
+            --toIgnore;
+            continue;
+        }
+
+        if (toGet == this->PER_PAGE) {
+            break;
+        }
 
         if (stream != "") {
             tasks.insert(
-                tasks.begin() + index, 
-                Task::fromCsv(to_string(index + 1), stream)
+                tasks.begin() + toGet, 
+                Task::fromCsv(to_string(index - 1), stream)
             );
+            toGet++;
         }
-
-        index++;
     }
 
     return tasks;
@@ -46,4 +56,10 @@ void TaskDatabaseManager::create(Task task) {
 
 void TaskDatabaseManager::update(Task task) {
     // todo
+}
+
+void TaskDatabaseManager::destroy(int id) {
+    ofstream file;
+    file.open(this->DB_FILE);
+    // line.replace(line.find(deleteline),deleteline.length(),"");
 }

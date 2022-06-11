@@ -28,19 +28,9 @@ Task::Task(
     this->completed_at = completed_at;
 }
 
-void Task::dump() {
-    cout << endl;
-    cout << "---------" << endl;
-    cout << "Value: " << this->value << endl;
-    cout << "Created At: " << this->created_at << endl;
-    cout << "Completed At: " << this->completed_at << endl;
-    cout << "---------" << endl;
-    cout << endl;
-}
-
 string Task::toCsv() {
     string tmp;
-    tmp += this->value + ",";
+    tmp += "\"" + this->value + "\",";
     tmp += this->created_at + ",";
     tmp += this->completed_at;
     return tmp;
@@ -73,4 +63,39 @@ string Task::getCreatedAt() {
 
 string Task::getCompletedAt() {
     return this->completed_at;
+}
+
+string Task::getFormattedId() {
+    int value = std::stoi(this->id) + 1;
+    return to_string(value);
+}
+
+string Task::getFormattedValue() {
+    return this->value;
+}
+
+string Task::getFormattedCreatedAt() {
+    try {
+        time_t value = stoi(this->created_at);
+        tm * value_tm; 
+        char output[100];
+        value_tm = localtime(&value);
+        strftime(output, 50, "%F %T", value_tm);
+        return (string) output;
+    } catch(const std::exception& e) {
+        return "";
+    }
+}
+
+string Task::getFormattedCompletedAt() {
+    try {
+        time_t value = stoi(this->completed_at);
+        tm * value_tm; 
+        char output[100];
+        value_tm = localtime(&value);
+        strftime(output, 50, "%F %T", value_tm);
+        return (string) output;
+    } catch(const std::exception& e) {
+        return "";
+    }
 }

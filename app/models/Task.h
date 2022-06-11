@@ -2,6 +2,7 @@
 #define __APP_MODELS_TASK__H
 
 #include <string>
+#include <ctime>
 
 class Task {
     private:
@@ -27,14 +28,17 @@ class Task {
         std::string getCreatedAt();
         std::string getCompletedAt();
 
+        std::string getFormattedId();
+        std::string getFormattedValue();
+        std::string getFormattedCreatedAt();
+        std::string getFormattedCompletedAt();
+
         std::string toCsv();
         
         Task static fromCsv(
             std::string id, 
             std::string data
         );
-
-        void dump();
 };
 
 #endif

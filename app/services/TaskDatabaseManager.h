@@ -7,12 +7,14 @@
 
 class TaskDatabaseManager {
     public:
-        std::vector<Task> paginate();
+        std::vector<Task> paginate(int page);
+        Task get(int id);
         void create(Task task);
         void update(Task task);
-        void destroy(Task task);
+        void destroy(int id);
     
     private: 
+        static const int PER_PAGE;
         static const std::string DB_FILE;
 };
 
