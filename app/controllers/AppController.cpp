@@ -2,6 +2,7 @@
 #include "../helpers/Helpers.h"
 #include <iostream>
 #include <cctype>
+#include <stdexcept>
 
 using namespace std;
 
@@ -15,6 +16,8 @@ void AppController::menuList() {
     cout << "2. Edit task" << endl;
     cout << "3. Toggle completion" << endl;
     cout << "4. Delete task" << endl;
+    cout << "A. Previous Page" << endl;
+    cout << "S. Next Page" << endl;
     cout << "Q. Exit" << endl;
 }
 
@@ -54,7 +57,13 @@ void AppController::initial() {
     Helpers::clearscreen();
 
     do {
-        this->menuList();
-        exit = this->menuSelect();
+        try {
+            this->menuList();
+            exit = this->menuSelect();
+        } catch(const invalid_argument& e) {
+            std::cerr << e.what() << '\n';
+        } catch(const runtime_error& e) {
+            std::cerr << e.what() << '\n';
+        }
     } while (!exit);
 }

@@ -8,6 +8,7 @@
 #include <cctype>
 #include <vector>
 #include <ctime>
+#include <stdexcept>
 
 using namespace std;
 
@@ -19,10 +20,10 @@ TaskController::TaskController() {
 void TaskController::index() {
     vector<Task> tasks = this->taskManager->paginate(this->page);
 
-    cout << Table::format("ID:", 15);
-    cout << Table::format("What to do:", 50);
-    cout << Table::format("Created At:", 20);
-    cout << Table::format("Completed At:", 20);
+    cout << Table::format("ID:", 10);
+    cout << Table::format("What to do:", 40);
+    cout << Table::format("Created At:", 22);
+    cout << Table::format("Completed At:", 22);
     cout << endl;
 
     int index = 0;
@@ -32,9 +33,9 @@ void TaskController::index() {
 
         index++;
         cout << Table::format(task.getFormattedId(), 10);
-        cout << Table::format(task.getFormattedValue(), 50);
-        cout << Table::format(task.getFormattedCreatedAt(), 20);
-        cout << Table::format(task.getFormattedCompletedAt(), 20);
+        cout << Table::format(task.getFormattedValue(), 40);
+        cout << Table::format(task.getFormattedCreatedAt(), 22);
+        cout << Table::format(task.getFormattedCompletedAt(), 22);
         cout << endl;
     }
 
@@ -46,38 +47,42 @@ void TaskController::create() {
     cout << "Task name: ";
     getline(std::cin, value);
 
+    if (value.length() == 0) {
+        throw invalid_argument("Value cant be empty.");
+    }
+
     Task task(value);
     this->taskManager->create(task);
 }
 
 void TaskController::edit() {
-    string id;
-    string value;
-
-    cout << "Please provide ID: " << endl;
-    getline(std::cin, id);
-    Task task = this->taskManager->get(stoi(id) - 1);
-    
-    cout << "Current value: " + task.getFormattedValue() << endl;
-    
-    cout << "New value: "; 
-    getline(std::cin, value);
-
-    task.setValue(value);
-
-    this->taskManager->update(task);
+    try {
+        string id;
+        string value;
+        cout << "Please provide ID: " << endl;
+        getline(std::cin, id);
+        Task task = this->taskManager->get(stoi(id) - 1);
+        cout << "Current value: " + task.getFormattedValue() << endl;
+        cout << "New value: "; 
+        getline(std::cin, value);
+        task.setValue(value);
+        this->taskManager->update(task);
+    } catch(const invalid_argument& e) {
+        throw invalid_argument("Task doesnt exists.");
+    }
 }
 
 void TaskController::toggleCompletion() {
-    string id;
-
-    cout << "Please provide ID: " << endl;
-    getline(std::cin, id);
-    Task task = this->taskManager->get(stoi(id) - 1);
-
-    task.toggleCompletion();
-
-    this->taskManager->update(task);
+    try {    
+        string id;
+        cout << "Please provide ID: " << endl;
+        getline(std::cin, id);
+        Task task = this->taskManager->get(stoi(id) - 1);
+        task.toggleCompletion();
+        this->taskManager->update(task);
+    } catch(const invalid_argument& e) {
+        throw invalid_argument("Task doesnt exists.");
+    }
 }
 
 void TaskController::destroy() {
