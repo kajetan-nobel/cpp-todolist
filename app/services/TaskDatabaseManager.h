@@ -19,7 +19,12 @@ class TaskDatabaseManager {
         static const std::string DB_FILE;
 
         std::fstream getFilestream(
-            std::string filePath,
+            std::string fileName,
+            std::ios_base::openmode mode
+        );
+
+        std::fstream getTempFilestream(
+            std::string fileName,
             std::ios_base::openmode mode
         );
 };

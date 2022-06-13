@@ -78,23 +78,33 @@ void TaskDatabaseManager::create(Task task) {
 }
 
 void TaskDatabaseManager::update(Task task) {
-    fstream file = this->getFilestream(
-        this->DB_FILE, 
-        ios_base::in | ios_base::out
-    );
+    string tempFilename = "temp" + this->DB_FILE;
+    fstream file = this->getFilestream(this->DB_FILE, ios_base::in);
+    fstream tempFile = this->getTempFilestream(tempFilename, ios_base::out);
+    
+    string stream;
+    int index;
 
-    cout << "Update" << endl;
-    cout << task.toCsv() << endl;
+    while (getline(file, stream)) {
+        if (index != stoi(task.getId())) {
+            tempFile << stream << endl;
+        } else {
+            tempFile << task.toCsv() + "\n";
+        }
+        index++;
+    }
+
+    file.close();
+    tempFile.close();
+
+    remove(this->DB_FILE.c_str());
+    rename(tempFilename.c_str(), this->DB_FILE.c_str());
 }
 
 void TaskDatabaseManager::destroy(int id) {
     string tempFilename = "temp" + this->DB_FILE;
-    
-    // To avoid some duplication if something went wrong previously.
-    remove(tempFilename.c_str());
-
-    fstream file = this->getFilestream(this->DB_FILE, ios_base::out);
-    fstream tempFile = this->getFilestream(tempFilename, ios_base::out);
+    fstream file = this->getFilestream(this->DB_FILE, ios_base::in);
+    fstream tempFile = this->getTempFilestream(tempFilename, ios_base::out);
     
     string stream;
     int index = 0;
@@ -114,16 +124,25 @@ void TaskDatabaseManager::destroy(int id) {
 }
 
 fstream TaskDatabaseManager::getFilestream(
-    string filePath,
+    string fileName,
     ios_base::openmode mode
 ) {
     fstream file;
     
-    file.open(filePath, mode);
+    file.open(fileName, mode);
 
     if (!file.is_open()) {
-        throw runtime_error("Unable to open " + filePath);
-    }   
+        throw runtime_error("Unable to open " + fileName);
+    }
 
     return file;
+}
+
+fstream TaskDatabaseManager::getTempFilestream(
+    string fileName,
+    ios_base::openmode mode
+) {
+    // To avoid some duplication if something went wrong previously.
+    remove(fileName.c_str());
+    return this->getFilestream(fileName, mode);
 }
