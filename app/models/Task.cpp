@@ -32,13 +32,13 @@ string Task::toCsv() {
     string tmp;
     tmp += "\"" + this->value + "\",";
     tmp += "\"" + this->created_at + "\",";
-    tmp += "\"" + this->completed_at + "\"";
+    tmp += "\"" + this->completed_at + "\",";
     return tmp;
 }
 
 Task Task::fromCsv(string id, string data) {
-    vector<string> row = CSV::read_row(data, ',');    
-    
+    vector<string> row = CSV::read_row(data, ',');
+
     Task task(
         id,
         row[0],
@@ -104,10 +104,19 @@ void Task::setValue(string value) {
     this->value = value;
 }
 
-void Task::setCreatedAt(string value) {
-    this->created_at = value;
-}
-
 void Task::setCompletedAt(string value) {
     this->completed_at = value;
+}
+
+bool Task::isCompleted() {
+    return this->completed_at != "";
+}
+
+void Task::toggleCompletion() {
+    if (this->isCompleted()) {
+        this->completed_at = "";
+    } else {
+        long int now = static_cast<long int>(time(NULL));
+        this->completed_at = to_string(now);       
+    }
 }

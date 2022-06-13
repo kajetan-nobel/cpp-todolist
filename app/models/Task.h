@@ -34,8 +34,9 @@ class Task {
         std::string getFormattedCompletedAt();
 
         void setValue(std::string value);
-        void setCreatedAt(std::string value);
         void setCompletedAt(std::string value);
+        bool isCompleted();
+        void toggleCompletion();
 
         std::string toCsv();
         

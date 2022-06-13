@@ -64,21 +64,27 @@ void TaskController::edit() {
     getline(std::cin, value);
 
     task.setValue(value);
-    
+
     this->taskManager->update(task);
 }
 
 void TaskController::toggleCompletion() {
-    cout << "Toggle" << endl;
-    // Task task(value);
-    // this->taskManager->update(task);
+    string id;
+
+    cout << "Please provide ID: " << endl;
+    getline(std::cin, id);
+    Task task = this->taskManager->get(stoi(id) - 1);
+
+    task.toggleCompletion();
+
+    this->taskManager->update(task);
 }
 
 void TaskController::destroy() {
-    string value;
+    string id;
     cout << "Please provide ID: " << endl;
-    getline(std::cin, value);
-    this->taskManager->destroy(stoi(value) - 1);
+    getline(std::cin, id);
+    this->taskManager->destroy(stoi(id) - 1);
 }
 
 void TaskController::pageUp() {
