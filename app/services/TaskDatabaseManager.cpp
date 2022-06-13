@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <stdexcept>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ vector<Task> TaskDatabaseManager::paginate(int page) {
 
     file.open(this->DB_FILE);
 
-    if (!file) {
+    if (!file || !file.is_open()) {
         return tasks;
     }
 
@@ -44,12 +45,45 @@ vector<Task> TaskDatabaseManager::paginate(int page) {
         }
     }
 
+    file.close();
+
     return tasks;
+}
+
+Task TaskDatabaseManager::get(int id) {
+    ifstream file;
+
+    file.open(this->DB_FILE);
+
+    if (!file.is_open()) {
+        throw runtime_error("Unable to open " + this->DB_FILE);
+    }
+
+    string stream;
+    int index = 0;
+
+    while (getline(file, stream)) {
+        if (index == id) {
+            Task task = Task::fromCsv(to_string(id), stream);
+            file.close();
+            return task;
+        }
+        index++; 
+    }
+
+    file.close();
+
+    throw invalid_argument("Task doesnt exists");
 }
 
 void TaskDatabaseManager::create(Task task) {
     ofstream file;
     file.open(this->DB_FILE, ios_base::app);
+
+    if (!file.is_open()) {
+        throw runtime_error("Unable to open " + this->DB_FILE);
+    }
+
     file << task.toCsv() + "\n";
     file.close();
 }
@@ -59,7 +93,37 @@ void TaskDatabaseManager::update(Task task) {
 }
 
 void TaskDatabaseManager::destroy(int id) {
-    ofstream file;
+    ifstream file;
+    ofstream tempFile; 
+    string tempFilename = "temp" + this->DB_FILE;
+
+    // To avoid some duplication if something went wrong previously.
+    remove(tempFilename.c_str());
+
     file.open(this->DB_FILE);
-    // line.replace(line.find(deleteline),deleteline.length(),"");
+    tempFile.open(tempFilename);
+
+    if (!file.is_open()) {
+        throw runtime_error("Unable to open " + this->DB_FILE);
+    }
+
+    if (!tempFile.is_open()) {
+        throw runtime_error("Unable to open " + tempFilename);
+    }
+
+    string stream;
+    int index = 0;
+
+    while (getline(file, stream)) {
+        if (index != id) {
+            tempFile << stream << endl;
+        }
+        index++;
+    }
+
+    file.close();
+    tempFile.close();
+
+    remove(this->DB_FILE.c_str());
+    rename(tempFilename.c_str(), this->DB_FILE.c_str());
 }

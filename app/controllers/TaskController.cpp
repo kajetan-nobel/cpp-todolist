@@ -1,6 +1,6 @@
 #include "TaskController.h"
 #include "../services/TaskDatabaseManager.h"
-#include "../helpers/Clearscreen.h"
+#include "../helpers/Helpers.h"
 #include "../helpers/Table.h"
 #include "../models/Task.h"
 #include <iostream>
@@ -51,7 +51,16 @@ void TaskController::create() {
 }
 
 void TaskController::edit() {
-    cout << "Edit" << endl;
+    string id;
+    string value;
+
+    cout << "Please provide ID: " << endl;
+    getline(std::cin, id);
+    Task task = this->taskManager->get(stoi(id) - 1);
+    cout << "Current value: " + task.getFormattedValue() << endl;
+    cout << "New value: "; 
+    getline(std::cin, value);
+    exit(1);
 }
 
 void TaskController::toggleCompletion() {
@@ -62,7 +71,7 @@ void TaskController::toggleCompletion() {
 
 void TaskController::destroy() {
     string value;
-    cout << "Delete" << endl;
+    cout << "Please provide ID: " << endl;
     getline(std::cin, value);
     this->taskManager->destroy(stoi(value) - 1);
 }

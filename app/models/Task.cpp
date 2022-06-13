@@ -31,8 +31,8 @@ Task::Task(
 string Task::toCsv() {
     string tmp;
     tmp += "\"" + this->value + "\",";
-    tmp += this->created_at + ",";
-    tmp += this->completed_at;
+    tmp += "\"" + this->created_at + "\",";
+    tmp += "\"" + this->completed_at + "\"";
     return tmp;
 }
 

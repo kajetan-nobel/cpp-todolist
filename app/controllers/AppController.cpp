@@ -1,5 +1,5 @@
 #include "AppController.h"
-#include "../helpers/Clearscreen.h"
+#include "../helpers/Helpers.h"
 #include <iostream>
 #include <cctype>
 
@@ -36,9 +36,9 @@ bool AppController::menuSelect() {
     } else if (option == "4") {
         this->taskController->destroy();
     } else if (option == "A" || option == "a") {
-        this->taskController->pageUp();
-    } else if (option == "S" || option == "s") {
         this->taskController->pageDown();
+    } else if (option == "S" || option == "s") {
+        this->taskController->pageUp();
     } else if (option == "Q" || option == "q") {
         exit = true;
     }
