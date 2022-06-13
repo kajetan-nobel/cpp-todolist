@@ -1,4 +1,3 @@
-#include <iostream>
 #include "app/controllers/AppController.h"
 
 int main() {

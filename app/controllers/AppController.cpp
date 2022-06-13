@@ -61,9 +61,9 @@ void AppController::initial() {
             this->menuList();
             exit = this->menuSelect();
         } catch(const invalid_argument& e) {
-            std::cerr << e.what() << '\n';
+            std::cerr << e.what() << endl;
         } catch(const runtime_error& e) {
-            std::cerr << e.what() << '\n';
+            std::cerr << e.what() << endl;
         }
     } while (!exit);
 }
