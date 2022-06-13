@@ -1,5 +1,5 @@
-#ifndef __APP_CLEARSCREEN__H
-#define __APP_CLEARSCREEN__H
+#ifndef __APP_HELPERS__H
+#define __APP_HELPERS__H
 
 namespace Helpers {
     void clearscreen();

@@ -10,14 +10,8 @@ const string TaskDatabaseManager::DB_FILE = "database.csv";
 const int TaskDatabaseManager::PER_PAGE = 10;
 
 vector<Task> TaskDatabaseManager::paginate(int page) {
-    ifstream file;
+    fstream file = this->getFilestream(this->DB_FILE, ios_base::in);
     vector<Task> tasks;
-
-    file.open(this->DB_FILE);
-
-    if (!file || !file.is_open()) {
-        return tasks;
-    }
 
     string stream;
     int index = 0;
@@ -51,14 +45,11 @@ vector<Task> TaskDatabaseManager::paginate(int page) {
 }
 
 Task TaskDatabaseManager::get(int id) {
-    ifstream file;
-
-    file.open(this->DB_FILE);
-
-    if (!file.is_open()) {
-        throw runtime_error("Unable to open " + this->DB_FILE);
-    }
-
+    fstream file = this->getFilestream(
+        this->DB_FILE,
+        ios_base::in
+    );
+    
     string stream;
     int index = 0;
 
@@ -77,40 +68,34 @@ Task TaskDatabaseManager::get(int id) {
 }
 
 void TaskDatabaseManager::create(Task task) {
-    ofstream file;
-    file.open(this->DB_FILE, ios_base::app);
-
-    if (!file.is_open()) {
-        throw runtime_error("Unable to open " + this->DB_FILE);
-    }
+    fstream file = this->getFilestream(
+        this->DB_FILE, 
+        ios_base::app
+    );
 
     file << task.toCsv() + "\n";
     file.close();
 }
 
 void TaskDatabaseManager::update(Task task) {
-    // todo
+    fstream file = this->getFilestream(
+        this->DB_FILE, 
+        ios_base::in | ios_base::out
+    );
+
+    cout << "Update" << endl;
+    cout << task.toCsv() << endl;
 }
 
 void TaskDatabaseManager::destroy(int id) {
-    ifstream file;
-    ofstream tempFile; 
     string tempFilename = "temp" + this->DB_FILE;
-
+    
     // To avoid some duplication if something went wrong previously.
     remove(tempFilename.c_str());
 
-    file.open(this->DB_FILE);
-    tempFile.open(tempFilename);
-
-    if (!file.is_open()) {
-        throw runtime_error("Unable to open " + this->DB_FILE);
-    }
-
-    if (!tempFile.is_open()) {
-        throw runtime_error("Unable to open " + tempFilename);
-    }
-
+    fstream file = this->getFilestream(this->DB_FILE, ios_base::out);
+    fstream tempFile = this->getFilestream(tempFilename, ios_base::out);
+    
     string stream;
     int index = 0;
 
@@ -126,4 +111,19 @@ void TaskDatabaseManager::destroy(int id) {
 
     remove(this->DB_FILE.c_str());
     rename(tempFilename.c_str(), this->DB_FILE.c_str());
+}
+
+fstream TaskDatabaseManager::getFilestream(
+    string filePath,
+    ios_base::openmode mode
+) {
+    fstream file;
+    
+    file.open(filePath, mode);
+
+    if (!file.is_open()) {
+        throw runtime_error("Unable to open " + filePath);
+    }   
+
+    return file;
 }

@@ -33,6 +33,10 @@ class Task {
         std::string getFormattedCreatedAt();
         std::string getFormattedCompletedAt();
 
+        void setValue(std::string value);
+        void setCreatedAt(std::string value);
+        void setCompletedAt(std::string value);
+
         std::string toCsv();
         
         Task static fromCsv(

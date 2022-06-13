@@ -57,10 +57,15 @@ void TaskController::edit() {
     cout << "Please provide ID: " << endl;
     getline(std::cin, id);
     Task task = this->taskManager->get(stoi(id) - 1);
+    
     cout << "Current value: " + task.getFormattedValue() << endl;
+    
     cout << "New value: "; 
     getline(std::cin, value);
-    exit(1);
+
+    task.setValue(value);
+    
+    this->taskManager->update(task);
 }
 
 void TaskController::toggleCompletion() {

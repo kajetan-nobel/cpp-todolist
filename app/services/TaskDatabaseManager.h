@@ -4,6 +4,7 @@
 #include "../models/Task.h"
 #include <string>
 #include <vector>
+#include <fstream>
 
 class TaskDatabaseManager {
     public:
@@ -16,6 +17,11 @@ class TaskDatabaseManager {
     private: 
         static const int PER_PAGE;
         static const std::string DB_FILE;
+
+        std::fstream getFilestream(
+            std::string filePath,
+            std::ios_base::openmode mode
+        );
 };
 
 #endif

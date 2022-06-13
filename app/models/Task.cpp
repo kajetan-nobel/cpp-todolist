@@ -99,3 +99,15 @@ string Task::getFormattedCompletedAt() {
         return "";
     }
 }
+
+void Task::setValue(string value) {
+    this->value = value;
+}
+
+void Task::setCreatedAt(string value) {
+    this->created_at = value;
+}
+
+void Task::setCompletedAt(string value) {
+    this->completed_at = value;
+}
